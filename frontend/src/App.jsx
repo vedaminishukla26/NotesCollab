@@ -5,6 +5,8 @@ import Home from "./screens/HomePage";
 import AuthPage from "./screens/AuthPage";
 import NotesListPage from "./screens/NotesListPage";
 import CreateNotePage from "./screens/CreateNotePage";
+import NoteViewPage from './screens/NoteViewPage';
+import NoteEditorPage from "./screens/NoteEditorPage";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuth } = useSelector((state) => state.auth);
@@ -30,14 +32,23 @@ function App() {
           }
         />
         <Route
-          path="/notes/new" 
+          path="/notes/new"
           element={
             <ProtectedRoute>
               <CreateNotePage />
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/notes/:id" // Add this route for viewing a single note
+          element={<ProtectedRoute><NoteViewPage /></ProtectedRoute>}
+        />
+        <Route
+          path="/notes/:id/edit"
+          element={<ProtectedRoute><NoteEditorPage /></ProtectedRoute>}
+        />
       </Routes>
+
     </>
   );
 }

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
-import http from '../api/http';
+import { useSelector } from 'react-redux';
+import http from '../axios';
 
 const NoteEditorPage = () => {
   const { id } = useParams();
@@ -12,6 +13,8 @@ const NoteEditorPage = () => {
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const user = useSelector(state => state.auth.user)
+  console.log("USer", user)
 
   useEffect(() => {
     if (!isNewNote) {
@@ -31,7 +34,7 @@ const NoteEditorPage = () => {
     setLoading(true);
     setError(null);
 
-    const payload = { title, content };
+    const payload = { title, content, userId: user.id };
     
     try {
       let response;

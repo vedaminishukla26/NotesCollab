@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 
 import http from '../axios'; 
 import NoteCard from '../components/NoteCard';
+import { useSelector } from 'react-redux';
 
 const NotesListPage = () => {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const user = useSelector(state => state.auth.user)
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -25,6 +27,19 @@ const NotesListPage = () => {
     };
     fetchNotes();
   }, []);
+
+  const handleDeleteNote = async (noteId) => {
+    try {
+      // API call to the backend
+      await http.delete(`/notes/${noteId}`);
+      
+      setNotes(currentNotes => currentNotes.filter(note => note.id !== noteId));
+    } catch (err) {
+      // Handle error, e.g., show a toast notification
+      alert('Failed to delete the note. Please try again.');
+      console.error(err);
+    }
+  };
 
   return (
     <div className="bg-slate-50 min-h-screen">
@@ -45,7 +60,7 @@ const NotesListPage = () => {
         {!loading && !error && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {notes.length > 0 ? (
-              notes.map((note) => <NoteCard key={note.id} note={note} />)
+              notes.map((note) => <NoteCard key={note.id} note={note} onDelete={handleDeleteNote} />)
             ) : (
               <p className="text-center text-gray-500 col-span-full">
                 You haven't created any notes yet.
