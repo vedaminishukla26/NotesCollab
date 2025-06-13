@@ -11,7 +11,7 @@ async function register(req, res, next) {
 
     try {
         const hash = await bcrypt.hash(password, 10);
-        const user = await prisma.user.create({ data: { email, username, password_hash: hash } });
+        const user = await prisma.user.create({ data: { email, username, passwordHash: hash } });
         const token = jwt.sign({ uid: user.id }, JWT_SECRET, { expiresIn: TOKEN_LIFE });
         res.json({ token });
     } catch (err) { next(err); }
@@ -22,11 +22,11 @@ async function login(req, res, next) {
 
     try {
         const user = await prisma.user.findUnique({ where: { email } });
-        if (!user || !(await bcrypt.compare(password, user.password_hash))) {
+        if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
         const token = jwt.sign({ uid: user.id }, JWT_SECRET, { expiresIn: TOKEN_LIFE });
-        res.json({ token });
+        res.json({ token, user });
     } catch (err) { next(err); }
 }
 
