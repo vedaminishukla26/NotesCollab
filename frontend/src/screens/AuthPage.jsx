@@ -39,6 +39,7 @@ const AuthPage = () => {
       }
 
       localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
       dispatch(loginSuccess({ token: data.token, user: data.user }));
       navigate('/notes');
     } catch (err) {

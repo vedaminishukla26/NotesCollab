@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 
 import Home from "./screens/HomePage";
 import AuthPage from "./screens/AuthPage";
+import NotesListPage from "./screens/NotesListPage";
+import CreateNotePage from "./screens/CreateNotePage";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuth } = useSelector((state) => state.auth);
@@ -23,10 +25,18 @@ function App() {
           path="/notes"
           element={
             <ProtectedRoute>
-              <Home />
+              <NotesListPage />
             </ProtectedRoute>
           }
-        />  
+        />
+        <Route
+          path="/notes/new" 
+          element={
+            <ProtectedRoute>
+              <CreateNotePage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );

@@ -7,6 +7,8 @@ export default {
     theme: {
       extend: {},          // customise later (colours, fonts, etc.)
     },
-    plugins: [],           // add forms/typography plugins here
+    plugins: [
+      require('@tailwindcss/typography'),
+    ],           // add forms/typography plugins here
   };
   

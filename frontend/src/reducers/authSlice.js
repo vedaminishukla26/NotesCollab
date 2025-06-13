@@ -2,10 +2,25 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialToken = localStorage.getItem('token');
 
+const loadUserFromStorage = () => {
+  try {
+    const serializedUser = localStorage.getItem('user');
+    if (serializedUser === null) {
+      return null;
+    }
+    return JSON.parse(serializedUser);
+  } catch (err) {
+    console.error("Could not load user from localStorage", err);
+    return null;
+  }
+};
+
+const initialUser = loadUserFromStorage()
+
 const initialState = {
-    user: null,
+    user: initialUser,
     token: initialToken,
-    isAuth: !!initialToken,
+    isAuth: !!initialToken && !!initialUser,
     error: null,
     authModalOpen: false
   };
